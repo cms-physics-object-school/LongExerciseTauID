@@ -26,7 +26,7 @@ if __name__ == "__main__":
         tree = uproot.open(filename)["Events"]
         data = {}
         for name in variables:
-            if "Tau_" in name:
+            if "Tau_" in name:  # Only use tau lepton leading in pT
                 data[name] = [x[0] if len(x) > 0 else -10 for x in tree.array(name).tolist()]
             else:
                 data[name] = tree.array(name)

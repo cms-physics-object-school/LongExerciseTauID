@@ -16,7 +16,7 @@ if __name__ == "__main__":
         tree = uproot.open(filename)["Events"]
         data = {}
         for name in variables:
-            if "Tau_" in name or "SV_" in name or "Jet_" in name:
+            if "Tau_" in name: # Only use tau lepton leading in pT
                 data[name] = [x[0] if len(x) > 0 else -10 for x in tree.array(name).tolist()]
             else:
                 data[name] = tree.array(name)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         lims = np.percentile(signal[name], [5, 95])
         bins = np.linspace(lims[0], lims[1], 30)
         for df, label in [[signal, "Signal"], [background, "Background"]]:
-            plt.hist(df[name], bins=bins, lw=3, histtype="step", label=label, density=True)
+            plt.hist(df[name], bins=bins, lw=3, histtype="step", label=label, normed=1)
         plt.xlabel(name)
         plt.legend()
         plt.xlim((bins[0], bins[-1]))
