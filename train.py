@@ -26,7 +26,8 @@ if __name__ == "__main__":
         tree = uproot.open(filename)["Events"]
         data = {}
         for name in variables:
-            if "Tau_" in name:  # Only use tau lepton leading in pT
+            # Only use tau lepton leading in pT. Set a default (here -10) for events which has no tau lepton at all.
+            if "Tau_" in name: 
                 data[name] = [x[0] if len(x) > 0 else -10 for x in tree.array(name).tolist()]
             else:
                 data[name] = tree.array(name)
@@ -37,15 +38,18 @@ if __name__ == "__main__":
 
     # Skim dataset
     def skim(df):
+        # Remove events which have not tau lepton at all, determined by the fact that we set Tau_pt to -10 in these cases.
         return df[df["Tau_pt"] > 0]
 
     signal = skim(signal)
     background = skim(background)
 
-    # Compute training weights
+    # Compute training weights.
     sum_entries = len(signal) + len(background)
 
     def reweight(df):
+        # Reweight samples to the same importance - this will tell the neural net that we are equally interested in finding fake and genuine tau leptons.
+        # Is this the optimal setting?
         df["training_weight"] = sum_entries / float(len(df))
 
     reweight(signal)
@@ -58,6 +62,7 @@ if __name__ == "__main__":
         w = df.as_matrix(columns=["training_weight"])
         return x, y, w
 
+    # The input variables are stored in an array "x", the desired output are stored in an array "y". In our case this is "0" for fake taus, and "1" for genuine taus.
     x_sig, y_sig, w_sig = to_numpy(signal, class_label=1)
     x_bkg, y_bkg, w_bkg = to_numpy(background, class_label=0)
 
@@ -67,15 +72,18 @@ if __name__ == "__main__":
     w = np.vstack([w_sig, w_bkg]).squeeze()
 
     # Train preprocessing and transform inputs
+    # This will transform variable distributions to the same mean and variance
     scaler = StandardScaler().fit(x)
     x = scaler.transform(x)
 
-    # Stack layers defining neural network architecture: 1 hidden layer with 100 neuron, 1 output node
+    # Stack layers defining neural network architecture: 1 hidden layer with 10 neurons, 1 output node
+    # NN model can be adapted: Number of layers, nodes, activation functions for hidden layer and output node ...
     model = Sequential()
     model.add(Dense(100, activation="relu", input_dim=len(variables)))
     model.add(Dense(1, activation="sigmoid"))
 
     # Specify loss function and optimizer algorithm
+    # Again loss function and optimizer was chosen by us and can be adapted
     model.compile(loss="binary_crossentropy", optimizer="adam")
 
     # Print architecture
@@ -85,6 +93,7 @@ if __name__ == "__main__":
     x_train, x_val, y_train, y_val, w_train, w_val = train_test_split(x, y, w, test_size=0.5, random_state=1234)
 
     # Declare callbacks to be used during training
+    # Early stopping will stop training if no improvement was achieved the last N epochs (N is set by "patience" parameter)
     model_checkpoint = ModelCheckpoint("model.h5", save_best_only=True, verbose=True)
     early_stopping = EarlyStopping(patience=5, verbose=True)
 
