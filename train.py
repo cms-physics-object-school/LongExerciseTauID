@@ -4,9 +4,7 @@ import pandas as pd
 import uproot
 import pickle
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -71,41 +69,30 @@ if __name__ == "__main__":
     y = np.hstack([y_sig, y_bkg]).squeeze()
     w = np.vstack([w_sig, w_bkg]).squeeze()
 
+    print ("Input variables: ",x)
+    print ("True output class: ",y)
+    print ("Training weights: ",w)
+
     # Train preprocessing and transform inputs
     # This will transform variable distributions to the same mean and variance
     scaler = StandardScaler().fit(x)
     x = scaler.transform(x)
 
-    # Stack layers defining neural network architecture: 1 hidden layer with 10 neurons, 1 output node
-    # NN model can be adapted: Number of layers, nodes, activation functions for hidden layer and output node ...
-    model = Sequential()
-    model.add(Dense(100, activation="relu", input_dim=len(variables)))
-    model.add(Dense(1, activation="sigmoid"))
-
-    # Specify loss function and optimizer algorithm
-    # Again loss function and optimizer was chosen by us and can be adapted
-    model.compile(loss="binary_crossentropy", optimizer="adam")
-
+    # TODO: Create new Sequential neural network called "model" (see tutorial on slides or https://keras.io/)
+    # TODO: Add one dense hidden layer (around 100 neurons), and one dense output layer (1 neuron). Use a "relu" activation function for the hidden layer, and a "sigmoid" activation function for the output layer.
+    # model = 
+    # TODO: Specify loss function and optimizer algorithm
+    
     # Print architecture
     model.summary()
 
     # Split dataset in training and validation part used for the gradient steps and monitoring of the training
     x_train, x_val, y_train, y_val, w_train, w_val = train_test_split(x, y, w, test_size=0.5, random_state=1234)
 
-    # Declare callbacks to be used during training
+    # TODO: Declare callbacks to be used during training (keras.callbacks.ModelCheckpoint and keras.callbacks.EarlyStopping)
     # Early stopping will stop training if no improvement was achieved the last N epochs (N is set by "patience" parameter)
-    model_checkpoint = ModelCheckpoint("model.h5", save_best_only=True, verbose=True)
-    early_stopping = EarlyStopping(patience=5, verbose=True)
-
-    # Train the neural network
-    history = model.fit(
-                    x_train,
-                    y_train,
-                    sample_weight=w_train,
-                    batch_size=100,
-                    epochs=10000,
-                    validation_data=(x_val, y_val, w_val),
-                    callbacks=[early_stopping, model_checkpoint])
+    
+    # TODO: Train the neural network
 
     # Plot loss on training and validation dataset
     plt.figure(figsize=(6,6))
