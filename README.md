@@ -1,5 +1,3 @@
-
-
 ### 2. Tau ID
 
 **Set up code**
@@ -59,3 +57,4 @@ cp /home/home3/gast/cmspost3/public/TauID/*root .
 14. How can you explain the difference in performance? Hint: Plot the $p_{T}$ distribution of genuine and fake taus from the $t\bar{t}$ sample.
 
 15. How can you recover the performance to make the classifier more applicable to $t\bar{t}$ events?
+
