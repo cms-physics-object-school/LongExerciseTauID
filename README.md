@@ -14,9 +14,9 @@ git cms-init
 git cms-addpkg PhysicsTools/NanoAOD 
 scram b -j 8
 
-git clone https://github.com/janekbechtel/TauIDCMSPOS
+git clone https://github.com/cms-physics-object-school/LongExerciseTauID
 
-cd TauIDCMSPOS
+cd LongExerciseTauID
 
 cmsDriver.py myNanoProdMc2018 -s NANO --mc --eventcontent NANOAODSIM --datatier NANOAODSIM  --no_exec  --conditions 102X_upgrade2018_realistic_v19 --era Run2_2018,run2_nanoAOD_102Xv1 --customise_commands="process.add_(cms.Service('InitRootHandlers', EnableIMT = cms.untracked.bool(False)))"
 
