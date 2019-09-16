@@ -34,7 +34,7 @@ cp /net/data_cms/cmspos/Tau/TauID/*root .
 
 3. In `nanoAOD`, not all information about the tau leptons are kept, e.g. the information of the impact parameter of the tau track with respect to the primary vertex, and its significance, is lost. We can customize the `nanoAOD` production to add this (and potentially more) parameters back. The variables to be written out in `nanoAOD` for tau leptons are defined in `../PhysicsTools/NanoAOD/python/taus_cff.py`. Add the variables `ip3d` and `ip3d_Sig` to the output file. (You can add more if you want, the variables available in a `PAT::Tau` object are defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_10_2_X/DataFormats/PatCandidates/interface/Tau.h
 
-4. Process 100 events and check that the new variables are properly written out. After you succeeded, you can copy the three root files from `/net/data_cms/cmspos/Tau/TauID/nanoAOD_files/` to your directory, in which around 50,000 events processed with the same configuration are stored. You can use these files for the following steps to save computing time for the nanoAOD conversion.
+4. Process 100 events and check that the new variables are properly written out.
 
 5. Find variables which you suspect have discriminating power in seperating jets misidentified as hadronic tau leptons, and genuine hadronic tau leptons. You can add the variables to `plot.py` and check in the resulting distributions which distributions differ between the two samples.
 
