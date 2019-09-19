@@ -25,6 +25,7 @@ if __name__ == "__main__":
 
     signal = load_tree("htt_nano.root")
     background = load_tree("qcd_nano.root")
+    ttbar = load_tree("tt_semileptonic_nano.root")
 
     # Skim dataset
     def skim(df):
@@ -32,17 +33,18 @@ if __name__ == "__main__":
 
     signal = skim(signal)
     background = skim(background)
-
+    ttbar = skim(ttbar)
     # Plot each variable
     for name in variables:
         plt.figure(figsize=(6,6))
         lims = np.percentile(signal[name], [5, 95])
         bins = np.linspace(lims[0], lims[1], 30)
-        for df, label in [[signal, "Signal"], [background, "Background"]]:
+        for df, label in [[signal, "Signal"], [background, "Background"], [ttbar, "top quark decay"]]:
             plt.hist(df[name], bins=bins, lw=3, histtype="step", label=label, normed=1)
         plt.xlabel(name)
         plt.legend()
         plt.xlim((bins[0], bins[-1]))
+	#plt.ylim(0.,0.05)
         plt.tight_layout()
         plt.savefig(name + ".png")
         print "Created "+name+".png"
