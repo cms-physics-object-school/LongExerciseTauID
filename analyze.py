@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from train import variables
+from train_solution_part1 import variables
 
 # Load keras model
 model = load_model("model.h5", compile=False)

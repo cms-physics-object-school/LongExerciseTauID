@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 
 # Specify variables which shall be used as input for the neural network
-variables = ["Tau_pt"]
+variables = ["Tau_flightLength", "Tau_flightLengthSig", "Tau_ip3d", "Tau_ip3d_Sig", "Tau_chargedIso",  "Tau_decayMode", "Tau_neutralIso", 
+             "Tau_dxy", "Tau_eta","Tau_dz", "Tau_photonsOutsideSignalCone", "Tau_mass", "Tau_leadTkPtOverTauPt", "Tau_leadTkDeltaEta", "Tau_leadTkDeltaPhi","Tau_pt"]
 
 if __name__ == "__main__":
     # Read NanoAOD files
